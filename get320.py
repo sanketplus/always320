@@ -1,16 +1,29 @@
-import mechanize, BeautifulSoup
+import mechanize
+import BeautifulSoup
 
-b=mechanize.Browser()
-b.open("https://vubey.yt")
-b.select_form('wf-form-signup-form')
-b.form['videoURL']=raw_input("URL:")
-fs=b.submit()
-d=fs.get_data()
 
-bs=BeautifulSoup.BeautifulSoup(d)
-links = bs.findAll("a")
+def main():
+    # query
+    # url = youtube_search(query)
+    # link = get_link(url)
+    # =>>>>>>>#SERVICE-SELECTION get_html_service-name(url)
+    # =>>> get_link(html,look)
+    # path = wget(link)
+    # picard?
 
-link = [l for l in links if "here" in l]
-url = link[0].get("href")
+    b = mechanize.Browser()
+    b.select_form('wf-form-signup-form')
+    b.form['videoURL'] = raw_input("URL:")
+    fs = b.submit()
+    d = fs.get_data()
 
-print url 
+    bs = BeautifulSoup.BeautifulSoup(d)
+    links = bs.findAll("a")
+
+    link = [l for l in links if "here" in l]
+    url = link[0].get("href")
+
+    print url
+
+if __name__ == "__main__":
+    main()
