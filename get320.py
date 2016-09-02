@@ -1,6 +1,7 @@
 import mechanize
 import BeautifulSoup
 
+from downloader import wget_get
 
 def main():
     # query
@@ -12,6 +13,7 @@ def main():
     # picard?
 
     b = mechanize.Browser()
+    b.open("https://vubey.yt")
     b.select_form('wf-form-signup-form')
     b.form['videoURL'] = raw_input("URL:")
     fs = b.submit()
@@ -24,6 +26,8 @@ def main():
     url = link[0].get("href")
 
     print url
+    wget_get(url)
+
 
 if __name__ == "__main__":
     main()
