@@ -2,6 +2,7 @@ import mechanize
 import BeautifulSoup
 
 from downloader import wget_get
+from parseyoutube import get_results
 
 def main():
     # query
@@ -11,11 +12,15 @@ def main():
     # =>>> get_link(html,look)
     # path = wget(link)
     # picard?
+    query = raw_input("Song name:")
+    results = get_results(query)
+
+    choice = 0
 
     b = mechanize.Browser()
     b.open("https://vubey.yt")
     b.select_form('wf-form-signup-form')
-    b.form['videoURL'] = raw_input("URL:")
+    b.form['videoURL'] = results[choice][1]
     fs = b.submit()
     d = fs.get_data()
 
