@@ -12,4 +12,4 @@ def wget_get(url):
 
     downloaded = wget.download(url,file_name)
 
-    print downloaded
+    print "\n Downloaded file: " + downloaded
