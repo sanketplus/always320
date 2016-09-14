@@ -13,9 +13,12 @@ def main():
     # path = wget(link)
     # picard?
     query = raw_input("Song name:")
-    results = get_results(query)
+    print "parsing youtube..."
 
+    results = get_results(query)
     choice = 0
+
+    print "generating MP3 link..."
 
     b = mechanize.Browser()
     b.open("https://vubey.yt")
@@ -30,7 +33,7 @@ def main():
     link = [l for l in links if "here" in l]
     url = link[0].get("href")
 
-    print url
+    print "link generated: " + url
     wget_get(url)
 
 
