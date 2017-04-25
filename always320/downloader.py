@@ -1,5 +1,8 @@
 import wget
-import urllib2
+try:
+    from urllib.request import urlopen
+except:
+    from urllib import urlopen
 
 
 
@@ -29,11 +32,11 @@ def urllib_download(url,file_name=""):
     Returns:
         file_name:name of downloaded file
     """
-    print("Downlading: %s"%(url))
-    mp3file = urllib2.urlopen(url)
+    print("Downlading: %s"%(url.encode('utf8').decode('ascii')))
+    mp3file = urlopen(url)
     if file_name == "":
         file_name = url.split("/")[-1]
     with open(file_name,'wb') as output:
-        print("Saving: %s"%(file_name))
+        print("Saving: %s"%(file_name.encode('utf8').decode('ascii')))
         output.write(mp3file.read())
     return file_name

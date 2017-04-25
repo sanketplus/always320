@@ -1,8 +1,14 @@
 #!python
+from time import sleep
+import os
 import threading
 from sys import argv
 
-from always320.vubey_api import get_mp3_url
+import re
+
+import always320.vubey_api as vubey_api
+import always320.youtubeinmp3API as youtubeinmp3API
+
 from always320.downloader import wget_get
 from always320.parseyoutube import get_results
 
@@ -22,7 +28,10 @@ def select_link(results):
         #Show only 5 reults
         if (i!= 0 and i%4 ==0) or (i==len(results)-1):
             print("")
-            choice = raw_input("Select Song (x for more results):")
+            try:
+                choice = raw_input("Select Song (x for more results):")
+            except Exception as e:
+                choice = input("Select Song (x for more results):")
             if choice == 'x':
                 continue
             try:
@@ -43,7 +52,10 @@ def do_main(cmd_line=False,query=""):
 
     """
     if not cmd_line:
-        query = raw_input("Song name:")
+        try:
+            query = raw_input("Song name:")
+        except Exception as e:
+            query = input("Song name:")
     else:
         print("Searching for: %s"%(query))
 
@@ -59,10 +71,40 @@ def do_main(cmd_line=False,query=""):
     yt_url = result['link']
 
     print("generating MP3 link...")
-    mp3_url = get_mp3_url(yt_url)
-    print("link generated: " + mp3_url.encode('utf8'))
-    file_name = wget_get(mp3_url,True)
+    try:
+        file_name = re.sub("[^a-zA-Z0-9.-]", "_",str(result['title']))+".mp3"
+    except Exception as e:
+        file_name = re.sub("[^a-zA-Z0-9.-]", "_",str(result['title'].encode('utf8'))+".mp3")
+    
+    
 
+    try:
+        mp3_url,title = vubey_api.get_mp3_url(yt_url)
+        if mp3_url!=None and title!=None:
+            print("link generated: " + mp3_url.encode('utf8'))
+            file_name = wget_get(mp3_url,True,file_name)    
+
+    except Exception as e:
+        print("Vubey not supported... Fallingback to Youtubeinmp3")
+
+        mp3_url,title = youtubeinmp3API.get_mp3_url(yt_url)
+        if mp3_url!=None and title!=None:
+            print("link generated: " + str(mp3_url.encode('utf8')))
+            file_name = wget_get(mp3_url,True,file_name)
+
+        # There is an issue with the regular Youtubeinmp3 API that it returns an HTML file
+        # Its size is around 44kb so this works as long as you don't download anything of less than 50kb    
+
+        if os.path.getsize(file_name)/1024 < 50:
+            print("Something Went Wrong... Fallback to Youtubeinmp3 Dirty Method")
+            os.remove(file_name)
+            mp3_url,title = youtubeinmp3API.dirty_get_mp3_url(yt_url)
+        
+        if mp3_url!=None and title!=None:
+            print("link generated: " + str(mp3_url.encode('utf8')))
+            file_name = wget_get(mp3_url,True,file_name)
+
+        
 
 def main():
     if len(argv)>1:
@@ -76,7 +118,7 @@ def main():
                 threads.append(threading.Thread(target=do_main,args=(True,i,)))
             for i in range(len(threads)):
                 while threading.active_count()>5:
-                    pass
+                    sleep(1)
                 threads[i].start()
             fp.close()
         else:
