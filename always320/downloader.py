@@ -1,4 +1,4 @@
-import wget
+
 try:
     from urllib.request import urlopen
 except:
@@ -19,12 +19,16 @@ def wget_get(url,use_url_lib=False,file_name=""):
     if use_url_lib:
         urllib_download(url,file_name)
     else:
-        downloaded = wget.download(url,file_name)
-        print("\n Downloaded file: " + downloaded)
-    return file_name
+        try:
+            import wget
+            downloaded = wget.download(url,file_name)
+            print("\n Downloaded file: " + downloaded)
+            return file_name
+        except Exception as e:
+            raise e
 
 
-
+        
 def urllib_download(url,file_name=""):
     """Download file using urllib2, good for threading
     Args:

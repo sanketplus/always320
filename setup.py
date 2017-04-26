@@ -7,7 +7,7 @@ setup(
 	author_email=["parthpower@gmail.com","sanketplus@gmail.com"],
 	maintainer=["Parth Parikh","Sanket Patel"],
 	maintainer_email=["parthpower@gmail.com","sanketplus@gmail.com"],
-	version="0.2.8",
+	version="0.2.10",
 	packages=['always320'],
     entry_points={
         'console_scripts': [
