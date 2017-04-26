@@ -82,8 +82,7 @@ def do_main(cmd_line=False,query=""):
         mp3_url,title = vubey_api.get_mp3_url(yt_url)
         if mp3_url!=None and title!=None:
             print("link generated: " + mp3_url.encode('utf8'))
-            file_name = wget_get(mp3_url,True,file_name)    
-
+            file_name = wget_get(mp3_url,True,file_name)
     except Exception as e:
         print("Vubey not supported... Fallingback to Youtubeinmp3")
 

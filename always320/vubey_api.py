@@ -23,4 +23,4 @@ def get_mp3_url(yt_url):
         url = link[0].get("href")
         return (url,url.split('/')[-1])
     except Exception as e:
-        return (None,None)
+        raise e
