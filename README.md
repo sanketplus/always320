@@ -3,9 +3,9 @@ Download [amlost] always 320kpbs high quality mp3 from YouTube.
 
 ## Requirements
 - Python 2.7 (for Vubey API)
-- Python 3 fallback to Youtubeinmp3API
+- Python 3 fallback to Youtubeinmp3API (not anymore)
 - BeautifulSoup4
-- Mechanize (Optional)
+- Mechanize
 - Wget(Optional)
 
 ## Installation
