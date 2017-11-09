@@ -1,15 +1,7 @@
-try:
-    # Python 2
-    from BeautifulSoup import BeautifulSoup
-except Exception as e:
-    # Python 3
-    from bs4 import BeautifulSoup
+from BeautifulSoup import BeautifulSoup
+import mechanize
 
 def get_mp3_url(yt_url):
-    try:
-        import mechanize
-    except Exception as e:
-        raise e
     b = mechanize.Browser()
     b.open("https://vubey.yt")
     b.select_form('wf-form-signup-form')

@@ -6,11 +6,10 @@ from sys import argv
 
 import re
 
-import always320.vubey_api as vubey_api
-import always320.youtubeinmp3API as youtubeinmp3API
+import vubey_api as vubey_api
 
-from always320.downloader import wget_get
-from always320.parseyoutube import get_results
+from downloader import wget_get
+from parseyoutube import get_results
 
 
 
@@ -82,24 +81,8 @@ def do_main(cmd_line=False,query=""):
             print("link generated: " + mp3_url.encode('utf8'))
             wget_get(mp3_url,True,file_name)
     except Exception as e:
-        print("Vubey not supported... Fallingback to Youtubeinmp3")
-
-        mp3_url,title = youtubeinmp3API.get_mp3_url(yt_url)
-        if mp3_url!=None and title!=None:
-            print("link generated: " + str(mp3_url.encode('utf8')))
-            wget_get(mp3_url,True,file_name)
-
-        # There is an issue with the regular Youtubeinmp3 API that it returns an HTML file
-        # Its size is around 44kb so this works as long as you don't download anything of less than 50kb    
-        if os.path.getsize(file_name)/1024 < 50:
-            print("Something Went Wrong... Fallback to Youtubeinmp3 Dirty Method")
-            os.remove(file_name)
-            mp3_url,title = youtubeinmp3API.dirty_get_mp3_url(yt_url)
-        
-        if mp3_url!=None and title!=None:
-            print("link generated: " + str(mp3_url.encode('utf8')))
-            file_name = wget_get(mp3_url,True,file_name)
-
+        print("Vubey not supported... No fallback available")
+        raise e
         
 
 def main():

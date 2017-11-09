@@ -1,10 +1,7 @@
-
 try:
     from urllib.request import urlopen
 except:
     from urllib import urlopen
-
-
 
 def wget_get(url,use_url_lib=False,file_name=""):
     """ Download file using wget
