@@ -1,5 +1,14 @@
-import urllib
-from BeautifulSoup import BeautifulSoup
+try:
+    from urllib.request import urlopen
+    from urllib.parse import quote
+except Exception as e:
+    from urllib import urlopen
+    from urllib import quote
+
+try:
+    from BeautifulSoup import BeautifulSoup
+except Exception as e:
+    from bs4 import BeautifulSoup
 
 
 
@@ -11,8 +20,8 @@ def get_results(query):
         results: A list of dictionaries in format of {'title':<title>,'link':<yt_link>,
                                                     'uploader':<uploader>,'views':<views>}
     """
-    url = "https://www.youtube.com/results?search_query=" + urllib.quote(query)
-    res = urllib.urlopen(url)
+    url = "https://www.youtube.com/results?search_query=" + quote(query)
+    res = urlopen(url)
     html = res.read()
     soup = BeautifulSoup(html)
 

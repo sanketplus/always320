@@ -2,9 +2,10 @@
 Download [amlost] always 320kpbs high quality mp3 from YouTube.
 
 ## Requirements
-- Python 2.7 (doesn't work with Python 3 because of Mechanize)
+- Python 2.7 (for Vubey API)
+- Python 3 fallback to Youtubeinmp3API (not anymore)
+- BeautifulSoup4
 - Mechanize
-- BeautifulSoup
 - Wget(Optional)
 
 ## Installation
@@ -15,6 +16,5 @@ Download [amlost] always 320kpbs high quality mp3 from YouTube.
 `get320 [-f file_name][Song Name]`
 
 Specify a song name or input file with song name in each line.
-
 
 

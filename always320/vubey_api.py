@@ -1,5 +1,5 @@
+from bs4 import BeautifulSoup
 import mechanize
-import BeautifulSoup
 
 def get_mp3_url(yt_url):
     b = mechanize.Browser()
@@ -9,9 +9,10 @@ def get_mp3_url(yt_url):
     fs = b.submit()
     d = fs.get_data()
 
-    bs = BeautifulSoup.BeautifulSoup(d)
+    bs = BeautifulSoup(d)
     links = bs.findAll("a")
 
     link = [l for l in links if "here" in l]
     url = link[0].get("href")
-    return url
+    return (url,url.split('/')[-1])
+

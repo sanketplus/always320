@@ -1,10 +1,15 @@
 #!python
+from time import sleep
+import os
 import threading
 from sys import argv
 
-from always320.vubey_api import get_mp3_url
-from always320.downloader import wget_get
-from always320.parseyoutube import get_results
+import re
+
+import vubey_api as vubey_api
+
+from downloader import wget_get
+from parseyoutube import get_results
 
 
 
@@ -22,7 +27,10 @@ def select_link(results):
         #Show only 5 reults
         if (i!= 0 and i%4 ==0) or (i==len(results)-1):
             print("")
-            choice = raw_input("Select Song (x for more results):")
+            try:
+                choice = raw_input("Select Song (x for more results):")
+            except Exception as e:
+                choice = input("Select Song (x for more results):")
             if choice == 'x':
                 continue
             try:
@@ -43,7 +51,10 @@ def do_main(cmd_line=False,query=""):
 
     """
     if not cmd_line:
-        query = raw_input("Song name:")
+        try:
+            query = raw_input("Song name:")
+        except Exception as e:
+            query = input("Song name:")
     else:
         print("Searching for: %s"%(query))
 
@@ -59,10 +70,20 @@ def do_main(cmd_line=False,query=""):
     yt_url = result['link']
 
     print("generating MP3 link...")
-    mp3_url = get_mp3_url(yt_url)
-    print("link generated: " + mp3_url.encode('utf8'))
-    file_name = wget_get(mp3_url,True)
-
+    try:
+        file_name = re.sub("[^a-zA-Z0-9.-]", "_",str(result['title']))+".mp3"
+    except Exception as e:
+        file_name = re.sub("[^a-zA-Z0-9.-]", "_",str(result['title'].encode('utf8'))+".mp3")
+    
+    try:
+        mp3_url,title = vubey_api.get_mp3_url(yt_url)
+        if mp3_url!=None and title!=None:
+            print("link generated: " + mp3_url.encode('utf8'))
+            wget_get(mp3_url,True,file_name)
+    except Exception as e:
+        print("Vubey not supported... No fallback available")
+        raise e
+        
 
 def main():
     if len(argv)>1:
@@ -76,7 +97,7 @@ def main():
                 threads.append(threading.Thread(target=do_main,args=(True,i,)))
             for i in range(len(threads)):
                 while threading.active_count()>5:
-                    pass
+                    sleep(1)
                 threads[i].start()
             fp.close()
         else:
